@@ -1,0 +1,88 @@
+:root{
+  --night:#0a1740;
+  --royal:#2557d6;
+  --ice:#dff0ff;
+  --gold:#f5b73a;
+  --gold-deep:#b97a10;
+  --ink:#0d1f55;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{min-height:100%;background:var(--night)}
+body{
+  min-height:100vh;
+  font-family:"Nunito",system-ui,sans-serif;
+  color:var(--ice);
+  background:
+    linear-gradient(180deg,rgba(6,14,45,.55) 0%,rgba(6,14,45,.82) 55%,rgba(6,14,45,.95) 100%),
+    url("assets/bg.jpg") center top/cover no-repeat fixed;
+}
+.page{
+  max-width:520px;
+  margin:0 auto;
+  padding:28px 18px 40px;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+/* Hero: the one memorable moment, mascot art rising in */
+.hero{width:100%;display:flex;justify-content:center}
+.hero-img{
+  width:min(78%,340px);height:auto;
+  filter:drop-shadow(0 12px 30px rgba(0,0,0,.55)) drop-shadow(0 0 22px rgba(120,180,255,.35));
+  animation:rise .9s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes rise{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+
+.tagline{
+  margin:18px 8px 22px;
+  text-align:center;
+  font-weight:700;font-size:1.05rem;line-height:1.5;
+  text-shadow:0 2px 8px rgba(0,0,0,.6);
+}
+
+.links{list-style:none;width:100%;display:grid;gap:12px}
+
+/* Buttons shaped like cards: gold frame, glassy blue face */
+.card{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;
+  min-height:68px;
+  border-radius:16px;
+  text-decoration:none;color:var(--ice);
+  background:linear-gradient(160deg,rgba(37,87,214,.85),rgba(14,32,92,.92));
+  border:2.5px solid var(--gold);
+  box-shadow:0 0 0 2px var(--night),0 6px 18px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.25);
+  backdrop-filter:blur(6px);
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease;
+}
+.card:hover{transform:translateY(-3px) rotate(-.4deg);filter:brightness(1.12);box-shadow:0 0 0 2px var(--night),0 10px 24px rgba(0,0,0,.5),0 0 18px rgba(245,183,58,.45),inset 0 1px 0 rgba(255,255,255,.3)}
+.card:active{transform:translateY(0) scale(.98)}
+.card:focus-visible{outline:3px solid #fff;outline-offset:3px}
+
+.card svg{flex:none;width:30px;height:30px;fill:var(--gold)}
+.txt{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.txt b{font-family:"Lilita One",sans-serif;font-weight:400;font-size:1.3rem;letter-spacing:.2px;color:#fff}
+.txt small{font-size:.88rem;font-weight:600;color:rgba(223,240,255,.8)}
+
+/* Featured: the store, solid gold */
+.card.featured{
+  min-height:84px;
+  background:linear-gradient(180deg,#ffe28a 0%,var(--gold) 55%,var(--gold-deep) 100%);
+  border-color:#fff3c4;
+  color:var(--ink);
+}
+.card.featured svg{fill:var(--ink);width:36px;height:36px}
+.card.featured .txt b{color:var(--ink);font-size:1.5rem}
+.card.featured .txt small{color:rgba(13,31,85,.82)}
+
+.card.whats svg{fill:#5ff08f}
+
+footer{margin-top:30px;text-align:center;font-size:.85rem;font-weight:600;opacity:.75}
+
+@media (prefers-reduced-motion:reduce){
+  .hero-img{animation:none}
+  .card{transition:none}
+  .card:hover{transform:none}
+}
+@media (max-width:600px){
+  body{background-attachment:scroll;background-position:center top}
+}
