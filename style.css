@@ -14,7 +14,7 @@ body{
   color:var(--ice);
   background:
     linear-gradient(180deg,rgba(6,14,45,.55) 0%,rgba(6,14,45,.82) 55%,rgba(6,14,45,.95) 100%),
-    url("assets/bg.jpg") center top/cover no-repeat fixed;
+    url("assets/novobanner.png") center center/cover no-repeat fixed;
 }
 .page{
   max-width:520px;
@@ -84,5 +84,5 @@ footer{margin-top:30px;text-align:center;font-size:.85rem;font-weight:600;opacit
   .card:hover{transform:none}
 }
 @media (max-width:600px){
-  body{background-attachment:scroll;background-position:center top}
+  body{background-attachment:scroll;background-position:center center}
 }
