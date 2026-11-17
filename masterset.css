@@ -1,0 +1,69 @@
+.ms-page{max-width:1040px;margin:0 auto;padding:22px 16px 110px}
+.ms-head{text-align:center;margin-bottom:18px}
+.ms-head h1{font-family:"Lilita One",sans-serif;font-weight:400;font-size:2.2rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.ms-head p{margin-top:6px;font-weight:700;line-height:1.5;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.ms-back{display:inline-block;margin-bottom:8px;color:var(--gold);font-weight:800;text-decoration:none}
+
+.ms-filters{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.ms-filters #q{grid-column:1/-1}
+.ms-filters input,.ms-filters select{
+  width:100%;min-height:44px;padding:0 12px;border-radius:12px;
+  border:2px solid var(--gold);background:rgba(10,23,64,.85);color:#fff;
+  font:700 .95rem "Nunito",system-ui,sans-serif}
+.ms-filters input::placeholder{color:rgba(223,240,255,.6)}
+.ms-filters :focus-visible{outline:3px solid #fff;outline-offset:2px}
+.ms-count{margin:6px 2px 12px;font-weight:700;opacity:.85}
+
+.ms-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.ms-card{display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:14px;
+  background:linear-gradient(160deg,rgba(37,87,214,.85),rgba(14,32,92,.92));
+  border:2px solid var(--gold);box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.ms-img{position:relative;aspect-ratio:245/342;border-radius:8px;overflow:hidden;background:rgba(0,0,0,.25)}
+.ms-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1}
+.ms-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:10px;text-align:center;font-weight:800;opacity:.6}
+.ms-card h3{font-family:"Lilita One",sans-serif;font-weight:400;font-size:1.05rem;color:#fff;line-height:1.2}
+.ms-meta{font-size:.8rem;font-weight:600;color:rgba(223,240,255,.75)}
+.ms-tags{display:flex;flex-wrap:wrap;gap:4px}
+.ms-tags span{padding:2px 8px;border-radius:99px;background:rgba(245,183,58,.2);border:1px solid rgba(245,183,58,.6);font-size:.72rem;font-weight:800}
+.ms-price{font-weight:800;font-size:1.1rem;color:var(--gold)}
+.ms-price small{display:block;font-size:.72rem;color:rgba(223,240,255,.7);font-weight:600}
+.ms-add{margin-top:auto;min-height:44px;border:0;border-radius:10px;cursor:pointer;
+  background:linear-gradient(180deg,#ffe28a,var(--gold) 55%,var(--gold-deep));color:var(--ink);
+  font:400 1.05rem "Lilita One",sans-serif}
+.ms-add:active{transform:scale(.97)}
+.ms-more{display:block;margin:20px auto 0;min-height:48px;padding:0 28px;border-radius:12px;cursor:pointer;
+  border:2px solid var(--gold);background:rgba(10,23,64,.85);color:#fff;font:400 1.1rem "Lilita One",sans-serif}
+
+.ms-bar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:linear-gradient(0deg,rgba(6,14,45,.98),rgba(6,14,45,.85));z-index:20}
+.ms-bar-btn{width:100%;max-width:520px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;
+  min-height:52px;padding:0 18px;border-radius:14px;border:2.5px solid #fff3c4;cursor:pointer;
+  background:linear-gradient(180deg,#ffe28a,var(--gold) 55%,var(--gold-deep));color:var(--ink);
+  font:400 1.15rem "Lilita One",sans-serif}
+.ms-bar-btn b{font-weight:400}
+
+.ms-sheet{position:fixed;inset:0;z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.ms-sheet[hidden],.ms-bar[hidden],.ms-more[hidden]{display:none}
+.ms-sheet-back{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.ms-sheet-box{position:relative;width:100%;max-width:520px;max-height:88vh;overflow:auto;padding:18px;
+  border-radius:20px 20px 0 0;background:var(--night);border:2.5px solid var(--gold);border-bottom:0}
+.ms-sheet-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ms-sheet-top h2{font-family:"Lilita One",sans-serif;font-weight:400;font-size:1.5rem;color:#fff}
+.ms-x{width:44px;height:44px;border:0;border-radius:10px;background:transparent;color:#fff;font-size:1.2rem;cursor:pointer}
+.ms-cart{list-style:none;display:grid;gap:10px}
+.ms-cart li{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding-bottom:10px;border-bottom:1px solid rgba(223,240,255,.15)}
+.ms-cart b{display:block;color:#fff}
+.ms-cart small{color:rgba(223,240,255,.7);font-weight:600}
+.ms-qty{display:flex;align-items:center;gap:8px;font-weight:800}
+.ms-qty button{width:36px;height:36px;border-radius:10px;border:2px solid var(--gold);background:transparent;color:#fff;font-size:1.1rem;cursor:pointer}
+.ms-line{font-weight:800;min-width:72px;text-align:right}
+.ms-total{margin:14px 0;text-align:right;font:400 1.4rem "Lilita One",sans-serif;color:var(--gold)}
+.ms-send{margin-bottom:10px}
+.ms-clear{width:100%;min-height:44px;border:0;background:transparent;color:rgba(223,240,255,.7);font-weight:700;cursor:pointer;text-decoration:underline}
+
+@media (min-width:640px){
+  .ms-filters{grid-template-columns:2fr repeat(4,1fr)}
+  .ms-filters #q{grid-column:auto}
+  .ms-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (min-width:900px){.ms-grid{grid-template-columns:repeat(4,1fr)}}
