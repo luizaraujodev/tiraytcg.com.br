@@ -43,8 +43,11 @@
         var o = {}; head.forEach(function (h, i) { o[h] = (r[i] || '').trim(); });
         o.preco = num(o.preco); o.qtd = Math.floor(num(o.qtd));
         o.idioma = o.idioma.toUpperCase();
+        if (norm(o.variacao) === 'reverse') o.variacao = 'Reverse Holo';
+        if (norm(o.variacao) === 'normal') o.variacao = '';
+        o.titulo = o.nome + (o.variacao ? ' (' + o.variacao + ')' : '');
         o.key = [o.id, o.idioma, o.variacao, o.condicao].join('|');
-        o.busca = norm([o.nome, o.numero, o.id, o.set].join(' '));
+        o.busca = norm([o.titulo, o.numero, o.id, o.set].join(' '));
         return o;
       }).filter(function (o) { return o.id && o.nome && o.nome !== 'NÃO ENCONTRADO' && o.qtd > 0 && o.preco > 0; });
       fillFilters(); apply();
@@ -81,10 +84,10 @@
     var html = filtered.slice(shown, shown + PAGE).map(function (c) {
       var i = cards.indexOf(c);
       return '<article class="ms-card">' +
-        '<div class="ms-img">' + (c.imagem ? '<img loading="lazy" src="' + esc(thumb(c.imagem)) + '" alt="' + esc(c.nome) + '" onerror="this.remove()">' : '') + '<span class="ms-ph">' + esc(c.nome) + '</span></div>' +
-        '<h3>' + esc(c.nome) + '</h3>' +
+        '<div class="ms-img">' + (c.imagem ? '<img loading="lazy" src="' + esc(thumb(c.imagem)) + '" alt="' + esc(c.titulo) + '" onerror="this.remove()">' : '') + '<span class="ms-ph">' + esc(c.nome) + '</span></div>' +
+        '<h3>' + esc(c.titulo) + '</h3>' +
         '<p class="ms-meta">' + esc(c.set) + ' · ' + esc(c.numero) + '</p>' +
-        '<p class="ms-tags"><span>' + esc(c.idioma) + '</span><span>' + esc(c.condicao) + '</span>' + (c.variacao ? '<span>' + esc(c.variacao) + '</span>' : '') + (c.raridade ? '<span>' + esc(c.raridade) + '</span>' : '') + '</p>' +
+        '<p class="ms-tags"><span>' + esc(c.idioma) + '</span><span>' + esc(c.condicao) + '</span>' + (c.raridade ? '<span>' + esc(c.raridade) + '</span>' : '') + '</p>' +
         '<p class="ms-price">' + brl(c.preco) + ' <small>' + c.qtd + ' em estoque</small></p>' +
         '<button class="ms-add" data-i="' + i + '">Adicionar</button></article>';
     }).join('');
@@ -112,13 +115,13 @@
     $('bar').hidden = !items;
     $('bar-text').textContent = items + (items === 1 ? ' carta · ' : ' cartas · ') + brl(total);
     $('cart-list').innerHTML = ls.map(function (l) {
-      return '<li><div><b>' + esc(l.c.nome) + '</b><small>' + esc(l.c.numero) + ' · ' + esc(l.c.idioma) + ' · ' + esc(l.c.condicao) + (l.c.variacao ? ' · ' + esc(l.c.variacao) : '') + '</small></div>' +
+      return '<li><div><b>' + esc(l.c.titulo) + '</b><small>' + esc(l.c.numero) + ' · ' + esc(l.c.idioma) + ' · ' + esc(l.c.condicao) + '</small></div>' +
         '<div class="ms-qty"><button data-k="' + esc(l.c.key) + '" data-d="-1" aria-label="Menos">−</button><span>' + l.n + '</span><button data-k="' + esc(l.c.key) + '" data-d="1" aria-label="Mais">+</button></div>' +
         '<span class="ms-line">' + brl(l.n * l.c.preco) + '</span></li>';
     }).join('');
     $('cart-total').textContent = 'Total: ' + brl(total);
     var msg = 'Olá! Quero fazer um pedido do catálogo Masterset:\n' + ls.map(function (l) {
-      return '• ' + l.c.nome + ' ' + l.c.numero + ' (' + [l.c.idioma, l.c.condicao, l.c.variacao].filter(Boolean).join(', ') + ') x' + l.n + ' - ' + brl(l.n * l.c.preco);
+      return '• ' + l.c.titulo + ' ' + l.c.numero + ' (' + [l.c.idioma, l.c.condicao].join(', ') + ') x' + l.n + ' - ' + brl(l.n * l.c.preco);
     }).join('\n') + '\nTotal: ' + brl(total);
     $('send').href = 'https://wa.me/' + WHATS + '?text=' + encodeURIComponent(msg);
     if (!items) $('sheet').hidden = true;
