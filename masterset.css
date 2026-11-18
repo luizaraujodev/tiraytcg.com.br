@@ -68,3 +68,7 @@
 }
 @media (min-width:900px){.ms-grid{grid-template-columns:repeat(4,1fr)}}
 .ms-flag{width:20px;height:15px;object-fit:cover;border-radius:2px;vertical-align:-2px}
+.ms-copy{margin-bottom:12px;padding:12px;border-radius:12px;background:rgba(245,183,58,.12);border:1px solid rgba(245,183,58,.6)}
+.ms-copy[hidden]{display:none}
+.ms-copy p{font-weight:700;font-size:.9rem;line-height:1.4;margin-bottom:8px}
+.ms-copy button{width:100%;min-height:44px;border-radius:10px;border:2px solid var(--gold);background:transparent;color:#fff;font:400 1.05rem "Lilita One",sans-serif;cursor:pointer}

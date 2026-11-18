@@ -7,6 +7,7 @@
   var STORE = 'tiray-pedido-v1';
 
   var $ = function (id) { return document.getElementById(id); };
+  var MAX_URL_TEXT = 1500, listaCompleta = '';
   var cards = [], filtered = [], shown = 0, cart = {};
 
   // ---------- CSV ----------
@@ -134,9 +135,16 @@
         '<span class="ms-line">' + brl(l.n * l.c.preco) + '</span></li>';
     }).join('');
     $('cart-total').textContent = 'Total: ' + brl(total);
-    var msg = 'Olá! Quero fazer um pedido do catálogo Masterset:\n' + ls.map(function (l) {
-      return '• ' + l.c.titulo + ' ' + l.c.numero + ' (' + [l.c.idioma, l.c.condicao].join(', ') + ') x' + l.n + ' - ' + brl(l.n * l.c.preco);
-    }).join('\n') + '\nTotal: ' + brl(total);
+    var VC = { 'Holo': 'H', 'Reverse Holo': 'RH' };
+    var lista = ls.map(function (l) {
+      return l.n + 'x ' + l.c.id.toUpperCase() + ' (' + [l.c.idioma, l.c.condicao, VC[l.c.variacao]].filter(Boolean).join(' ') + ')';
+    }).join('\n');
+    var cab = 'Olá! Quero fazer um pedido do catálogo Masterset:\n';
+    var msg = cab + lista + '\nTotal: ' + brl(total);
+    var longo = encodeURIComponent(msg).length > MAX_URL_TEXT;
+    if (longo) msg = 'Olá! Quero fazer um pedido do catálogo Masterset: ' + items + ' cartas, total ' + brl(total) + '. Vou colar a lista completa a seguir.';
+    listaCompleta = lista + '\nTotal: ' + brl(total);
+    $('copy-wrap').hidden = !longo;
     $('send').href = 'https://wa.me/' + WHATS + '?text=' + encodeURIComponent(msg);
     if (!items) $('sheet').hidden = true;
   }
@@ -162,6 +170,15 @@
   });
   $('open-cart').addEventListener('click', function () { $('sheet').hidden = false; });
   $('sheet').addEventListener('click', function (e) { if (e.target.hasAttribute('data-close')) $('sheet').hidden = true; });
+  $('copy').addEventListener('click', function () {
+    var b = $('copy');
+    function ok() { b.textContent = 'Lista copiada ✓'; setTimeout(function () { b.textContent = 'Copiar lista do pedido'; }, 1800); }
+    function fallback() {
+      var ta = document.createElement('textarea'); ta.value = listaCompleta; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); ok(); } catch (e) {} ta.remove();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(listaCompleta).then(ok, fallback); else fallback();
+  });
   $('clear').addEventListener('click', function () { cart = {}; save(); renderCart(); });
 
   restore(); load();
