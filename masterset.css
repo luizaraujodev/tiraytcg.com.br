@@ -67,3 +67,4 @@
   .ms-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media (min-width:900px){.ms-grid{grid-template-columns:repeat(4,1fr)}}
+.ms-flag{width:20px;height:15px;object-fit:cover;border-radius:2px;vertical-align:-2px}

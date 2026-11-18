@@ -36,6 +36,19 @@
   function esc(s) { return String(s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }
   function norm(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
 
+  var FLAG = { PT: 'br', EN: 'us', JP: 'jp', ES: 'es' };
+  var LANG_ORDER = { PT: 0, EN: 1, JP: 2, ES: 3 };
+  function flag(l) {
+    var f = FLAG[l];
+    return f ? '<img class="ms-flag" src="https://flagcdn.com/w40/' + f + '.png" width="20" height="15" alt="" aria-hidden="true"> ' : '';
+  }
+  var collator = new Intl.Collator('pt-BR', { numeric: true, sensitivity: 'base' });
+  function cmp(a, b) {
+    return collator.compare(a.id, b.id) ||
+      ((LANG_ORDER[a.idioma] == null ? 9 : LANG_ORDER[a.idioma]) - (LANG_ORDER[b.idioma] == null ? 9 : LANG_ORDER[b.idioma])) ||
+      collator.compare(a.variacao, b.variacao) || collator.compare(a.condicao, b.condicao);
+  }
+
   function load() {
     fetch(CSV_URL).then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (t) {
       var rows = parseCSV(t), head = rows.shift().map(function (h) { return norm(h).trim(); });
@@ -50,6 +63,7 @@
         o.busca = norm([o.titulo, o.numero, o.id, o.set].join(' '));
         return o;
       }).filter(function (o) { return o.id && o.nome && o.nome !== 'NÃO ENCONTRADO' && o.qtd > 0 && o.preco > 0; });
+      cards.sort(cmp);
       fillFilters(); apply();
     }).catch(function () {
       $('count').textContent = 'Não foi possível carregar o catálogo agora. Tente novamente em instantes.';
@@ -87,7 +101,7 @@
         '<div class="ms-img">' + (c.imagem ? '<img loading="lazy" src="' + esc(thumb(c.imagem)) + '" alt="' + esc(c.titulo) + '" onerror="this.remove()">' : '') + '<span class="ms-ph">' + esc(c.nome) + '</span></div>' +
         '<h3>' + esc(c.titulo) + '</h3>' +
         '<p class="ms-meta">' + esc(c.set) + ' · ' + esc(c.numero) + '</p>' +
-        '<p class="ms-tags"><span>' + esc(c.idioma) + '</span><span>' + esc(c.condicao) + '</span>' + (c.raridade ? '<span>' + esc(c.raridade) + '</span>' : '') + '</p>' +
+        '<p class="ms-tags"><span>' + flag(c.idioma) + esc(c.idioma) + '</span><span>' + esc(c.condicao) + '</span>' + (c.raridade ? '<span>' + esc(c.raridade) + '</span>' : '') + '</p>' +
         '<p class="ms-price">' + brl(c.preco) + ' <small>' + c.qtd + ' em estoque</small></p>' +
         '<button class="ms-add" data-i="' + i + '">Adicionar</button></article>';
     }).join('');
@@ -115,7 +129,7 @@
     $('bar').hidden = !items;
     $('bar-text').textContent = items + (items === 1 ? ' carta · ' : ' cartas · ') + brl(total);
     $('cart-list').innerHTML = ls.map(function (l) {
-      return '<li><div><b>' + esc(l.c.titulo) + '</b><small>' + esc(l.c.numero) + ' · ' + esc(l.c.idioma) + ' · ' + esc(l.c.condicao) + '</small></div>' +
+      return '<li><div><b>' + esc(l.c.titulo) + '</b><small>' + esc(l.c.numero) + ' · ' + flag(l.c.idioma) + esc(l.c.idioma) + ' · ' + esc(l.c.condicao) + '</small></div>' +
         '<div class="ms-qty"><button data-k="' + esc(l.c.key) + '" data-d="-1" aria-label="Menos">−</button><span>' + l.n + '</span><button data-k="' + esc(l.c.key) + '" data-d="1" aria-label="Mais">+</button></div>' +
         '<span class="ms-line">' + brl(l.n * l.c.preco) + '</span></li>';
     }).join('');
