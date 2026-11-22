@@ -60,10 +60,11 @@
         if (norm(o.variacao) === 'reverse') o.variacao = 'Reverse Holo';
         if (norm(o.variacao) === 'normal') o.variacao = '';
         o.titulo = o.nome + (o.variacao ? ' (' + o.variacao + ')' : '');
+        o.link = /^https?:\/\//i.test(o.link_compra || '') ? o.link_compra : '';
         o.key = [o.id, o.idioma, o.variacao, o.condicao].join('|');
         o.busca = norm([o.titulo, o.numero, o.id, o.set].join(' '));
         return o;
-      }).filter(function (o) { return o.id && o.nome && o.nome !== 'NÃO ENCONTRADO' && o.qtd > 0 && o.preco > 0; });
+      }).filter(function (o) { return o.id && o.nome && o.nome !== 'NÃO ENCONTRADO' && ((o.qtd > 0 && o.preco > 0) || o.link); });
       cards.sort(cmp);
       fillFilters(); apply();
     }).catch(function () {
@@ -72,7 +73,7 @@
   }
 
   // ---------- filtros ----------
-  var FILTERS = { 'f-set': 'set', 'f-idioma': 'idioma', 'f-raridade': 'raridade', 'f-variacao': 'variacao' };
+  var FILTERS = { 'f-set': 'set', 'f-idioma': 'idioma', 'f-raridade': 'raridade', 'f-variacao': 'variacao', 'f-condicao': 'condicao' };
   function fillFilters() {
     Object.keys(FILTERS).forEach(function (id) {
       var k = FILTERS[id], vals = {};
@@ -82,6 +83,10 @@
       });
     });
   }
+  function hasFilters() {
+    for (var id in FILTERS) if ($(id).value) return true;
+    return $('sort').value !== 'id';
+  }
   function apply() {
     var q = norm($('q').value).trim();
     filtered = cards.filter(function (c) {
@@ -89,11 +94,18 @@
       for (var id in FILTERS) { var v = $(id).value; if (v && c[FILTERS[id]] !== v) return false; }
       return true;
     });
+    var so = $('sort').value;
+    if (so !== 'id') filtered.sort(function (a, b) {
+      return so === 'nome' ? collator.compare(a.titulo, b.titulo) :
+        so === 'preco-asc' ? (a.preco || 1e9) - (b.preco || 1e9) : b.preco - a.preco;
+    });
+    $('reset').hidden = !q && !hasFilters();
     shown = 0; $('grid').innerHTML = ''; more();
     $('count').textContent = filtered.length + (filtered.length === 1 ? ' carta' : ' cartas') + ' disponíveis';
   }
 
   // ---------- grid ----------
+  function host(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return 'loja'; } }
   function thumb(u) { return u ? u.replace('/high.webp', '/low.webp') : ''; }
   function more() {
     var html = filtered.slice(shown, shown + PAGE).map(function (c) {
@@ -103,8 +115,9 @@
         '<h3>' + esc(c.titulo) + '</h3>' +
         '<p class="ms-meta">' + esc(c.set) + ' · ' + esc(c.numero) + '</p>' +
         '<p class="ms-tags"><span>' + flag(c.idioma) + esc(c.idioma) + '</span><span>' + esc(c.condicao) + '</span>' + (c.raridade ? '<span>' + esc(c.raridade) + '</span>' : '') + '</p>' +
-        '<p class="ms-price">' + brl(c.preco) + ' <small>' + c.qtd + ' em estoque</small></p>' +
-        '<button class="ms-add" data-i="' + i + '">Adicionar</button></article>';
+        (c.preco ? '<p class="ms-price">' + brl(c.preco) + (c.qtd > 0 ? ' <small>' + c.qtd + ' em estoque</small>' : '') + '</p>' : '') +
+        (c.link ? '<a class="ms-buy" href="' + esc(c.link) + '" target="_blank" rel="noopener">Comprar em ' + esc(host(c.link)) + '</a>' : '') +
+        (!c.link && c.qtd > 0 && c.preco > 0 ? '<button class="ms-add" data-i="' + i + '">Adicionar</button>' : '') + '</article>';
     }).join('');
     $('grid').insertAdjacentHTML('beforeend', html);
     shown += PAGE; $('more').hidden = shown >= filtered.length;
@@ -139,10 +152,10 @@
     var lista = ls.map(function (l) {
       return l.n + 'x ' + l.c.id.toUpperCase() + ' (' + [l.c.idioma, l.c.condicao, VC[l.c.variacao]].filter(Boolean).join(' ') + ')';
     }).join('\n');
-    var cab = 'Olá! Quero fazer um pedido do catálogo Masterset:\n';
+    var cab = 'Olá! Quero fazer um pedido do catálogo de cartas:\n';
     var msg = cab + lista + '\nTotal: ' + brl(total);
     var longo = encodeURIComponent(msg).length > MAX_URL_TEXT;
-    if (longo) msg = 'Olá! Quero fazer um pedido do catálogo Masterset: ' + items + ' cartas, total ' + brl(total) + '. Vou colar a lista completa a seguir.';
+    if (longo) msg = 'Olá! Quero fazer um pedido do catálogo de cartas: ' + items + ' cartas, total ' + brl(total) + '. Vou colar a lista completa a seguir.';
     listaCompleta = lista + '\nTotal: ' + brl(total);
     $('copy-wrap').hidden = !longo;
     $('send').href = 'https://wa.me/' + WHATS + '?text=' + encodeURIComponent(msg);
@@ -159,11 +172,17 @@
   // ---------- eventos ----------
   var t; $('q').addEventListener('input', function () { clearTimeout(t); t = setTimeout(apply, 150); });
   Object.keys(FILTERS).forEach(function (id) { $(id).addEventListener('change', apply); });
+  $('sort').addEventListener('change', apply);
+  $('reset').addEventListener('click', function () {
+    $('q').value = ''; $('sort').value = 'id';
+    Object.keys(FILTERS).forEach(function (id) { $(id).value = ''; });
+    apply();
+  });
   $('more').addEventListener('click', more);
   $('grid').addEventListener('click', function (e) {
     var b = e.target.closest('.ms-add'); if (!b) return;
     change(cards[b.dataset.i].key, 1);
-    b.textContent = 'Adicionado ✓'; setTimeout(function () { b.textContent = 'Adicionar'; }, 900);
+    var t0 = b.textContent; b.textContent = 'Adicionado ✓'; setTimeout(function () { b.textContent = t0; }, 900);
   });
   $('cart-list').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-k]'); if (b) change(b.dataset.k, +b.dataset.d);

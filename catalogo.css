@@ -27,7 +27,7 @@
 .ms-tags span{padding:2px 8px;border-radius:99px;background:rgba(245,183,58,.2);border:1px solid rgba(245,183,58,.6);font-size:.72rem;font-weight:800}
 .ms-price{font-weight:800;font-size:1.1rem;color:var(--gold)}
 .ms-price small{display:block;font-size:.72rem;color:rgba(223,240,255,.7);font-weight:600}
-.ms-add{margin-top:auto;min-height:44px;border:0;border-radius:10px;cursor:pointer;
+.ms-add{min-height:44px;border:0;border-radius:10px;cursor:pointer;
   background:linear-gradient(180deg,#ffe28a,var(--gold) 55%,var(--gold-deep));color:var(--ink);
   font:400 1.05rem "Lilita One",sans-serif}
 .ms-add:active{transform:scale(.97)}
@@ -62,8 +62,8 @@
 .ms-clear{width:100%;min-height:44px;border:0;background:transparent;color:rgba(223,240,255,.7);font-weight:700;cursor:pointer;text-decoration:underline}
 
 @media (min-width:640px){
-  .ms-filters{grid-template-columns:2fr repeat(4,1fr)}
-  .ms-filters #q{grid-column:auto}
+  .ms-filters{grid-template-columns:repeat(4,1fr)}
+  .ms-filters #q{grid-column:1/-1}
   .ms-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media (min-width:900px){.ms-grid{grid-template-columns:repeat(4,1fr)}}
@@ -72,3 +72,9 @@
 .ms-copy[hidden]{display:none}
 .ms-copy p{font-weight:700;font-size:.9rem;line-height:1.4;margin-bottom:8px}
 .ms-copy button{width:100%;min-height:44px;border-radius:10px;border:2px solid var(--gold);background:transparent;color:#fff;font:400 1.05rem "Lilita One",sans-serif;cursor:pointer}
+
+.ms-reset{grid-column:1/-1;min-height:40px;border:0;background:transparent;color:var(--gold);font:800 .95rem "Nunito",system-ui,sans-serif;text-decoration:underline;cursor:pointer}
+.ms-reset[hidden]{display:none}
+.ms-buy{display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:10px;text-align:center;text-decoration:none;
+  border:2px solid var(--gold);background:transparent;color:#fff;font:400 1rem "Lilita One",sans-serif;padding:0 8px}
+.ms-tags{margin-bottom:auto}
