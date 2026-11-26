@@ -1,0 +1,24 @@
+.pk-progress{margin-bottom:12px}
+.pk-bar{height:14px;border-radius:99px;background:rgba(0,0,0,.4);border:2px solid var(--gold);overflow:hidden}
+.pk-bar i{display:block;height:100%;width:0;background:linear-gradient(180deg,#ffe28a,var(--gold));transition:width .25s}
+.pk-progress p{margin-top:6px;text-align:center;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.pk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pk-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 10px;cursor:pointer;
+  border-radius:14px;border:2px solid rgba(223,240,255,.25);color:#fff;font:inherit;
+  background:linear-gradient(160deg,rgba(37,87,214,.55),rgba(14,32,92,.85))}
+.pk-card img{width:72px;height:72px;object-fit:contain;filter:grayscale(1) brightness(.7);opacity:.75}
+.pk-card .n{font-size:.72rem;font-weight:800;color:rgba(223,240,255,.7)}
+.pk-card .nm{font-weight:800;font-size:.85rem;line-height:1.15;text-align:center;word-break:break-word}
+.pk-card .ck{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+  border:2px solid rgba(223,240,255,.5);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:transparent}
+.pk-card[aria-pressed="true"]{border-color:var(--gold);background:linear-gradient(160deg,rgba(37,87,214,.9),rgba(14,32,92,.95));box-shadow:0 0 12px rgba(245,183,58,.35)}
+.pk-card[aria-pressed="true"] img{filter:none;opacity:1}
+.pk-card[aria-pressed="true"] .ck{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:800}
+.pk-card:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.pk-msg{width:100%;height:30vh;margin-bottom:12px;padding:10px;border-radius:12px;border:2px solid var(--gold);
+  background:rgba(10,23,64,.85);color:#fff;font:600 .9rem "Nunito",system-ui,sans-serif;resize:none}
+.pk-copy{width:100%;min-height:44px;border-radius:10px;border:2px solid var(--gold);background:transparent;color:#fff;font:400 1rem "Lilita One",sans-serif;cursor:pointer}
+.ms-filters{grid-template-columns:1fr 1fr}
+.ms-filters #clear-all{grid-column:1/-1}
+@media (min-width:640px){.pk-grid{grid-template-columns:repeat(5,1fr)}.ms-filters{grid-template-columns:2fr 1fr auto}.ms-filters #clear-all{grid-column:auto}.ms-filters #q{grid-column:auto}}
+@media (min-width:900px){.pk-grid{grid-template-columns:repeat(6,1fr)}}
